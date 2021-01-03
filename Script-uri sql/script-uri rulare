@@ -1,0 +1,14 @@
+ 
+
+// creare tabele 
+source /home/iulian0user/Facultate/Anul 3/BD/BD-Tema/Tema_de_casa_bd/Tema_de_casa_BD/Script-uri sql/creare_tabele.sql
+
+// stergere tabele
+source /home/iulian0user/Facultate/Anul 3/BD/BD-Tema/Tema_de_casa_bd/Tema_de_casa_BD/Script-uri sql/stergereTabele.sql
+
+// inserare date
+source /home/iulian0user/Facultate/Anul 3/BD/BD-Tema/Tema_de_casa_bd/Tema_de_casa_BD/Script-uri sql/InserareDate.sql
+
+select * from produs 
+    inner join comanda_detalii on (id_produs=produs_id_produs)
+    where comanda_id_comanda = 1;
