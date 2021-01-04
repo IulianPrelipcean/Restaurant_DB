@@ -58,7 +58,7 @@ insert into restaurant(nume, adresa, telefon, email, oras, program) values('La S
 
 
 --insert PRODUS
-insert into produs(denumire, ingrediente, pret, gramaj, tip, stoc, restaurant_id_restaurant) values('paste cu ton', 'ceapa, ton, sos', 20, '400g', 'paste', 10, 1);
+	
 insert into produs(denumire, ingrediente, pret, gramaj, tip, stoc, restaurant_id_restaurant) values('paste carbonara', 'ou, bacon, cascaval, smantana', 25, '440g', 'paste', 10, 1);
 insert into produs(denumire, ingrediente, pret, gramaj, tip, stoc, restaurant_id_restaurant) values('pizza antique', 'sos de rosii, sunca, ciuperci, marar', 26, '650g', 'pizza', 10, 1);
 -- insert into produs(denumire, ingrediente, pret, gramaj, tip, stoc, restaurant_id_restaurant) values('pizza rustica', 'sos de rosii, ardei, bacon, ceapa', 26, '580g', 'pizza');

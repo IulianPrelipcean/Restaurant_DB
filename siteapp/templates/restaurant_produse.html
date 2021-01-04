@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>La Stejar</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+	<!-- font awesome -->
+  	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+	<!--Import Google Icon Font-->
+     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+     <script src="https://code.jquery.com/jquery-3.4.1.min.js">
+	</script>
+	<!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    
+
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+	<style type="text/css">
+		.body{
+			/*background: url(static/image/book5.jpg);*/
+			background-color: white;
+		}
+		.header{
+			/*background: url(static/image/book5.jpg);*/
+			background-size:cover;
+			background-position: cover;
+			min-height:100px;
+		}
+		.nav_setup{
+			background: rgba(1,1,1,0.2);
+		}
+		.brand{
+			background: black;
+		}
+		.brand-text{
+			color:white;
+		}
+		.formular{
+			max-width:700px;
+			max-height:300px;
+			margin:40px auto;
+			margin-top:20px;
+			padding:40px;
+
+		}
+		.section_log{
+			margin-top:-100px;
+		}
+		.p_author{
+			font-family:"Times New Roman", Times, serif;
+			font-size:15px;
+			color: black;
+			padding: 0px;
+			margin: 0px;
+			border: 0px;
+		}
+		.formular_modifica{
+			border-style: solid; 
+			border-top-style: none; 
+			border-left-style: none;
+			border-radius: 20px; 
+			border-color: black; 
+			border-width: 2px; 
+			margin-bottom:30px;
+		}
+		.formular_adauga{
+			border-style: solid; 
+			border-top-style: none; 
+			border-left-style: none;
+			border-radius: 20px; 
+			border-color: red; 
+			border-width: 2px; 
+			margin-bottom:30px;
+		}
+
+	</style>
+
+</head>
+<body class="body">
+	<header class="header">
+		<nav  class="nav-wraper nav_setup">
+			<div class="container">
+				<a href="/" class=" left brand-logo brand-text">La Stejar</a>
+				<ul id="nav-mobile"  class="right hide-on-small-right">
+					<li><a href="/restaurant_admin" class="btn brand z-depth-0">Restaurante</a></li>
+					<li><a href="/restaurant_angajati" class="btn brand z-depth-0">Angajati</a></li>
+					<li><a href="/comenzi" class="btn brand z-depth-0">Comenzi</a></li>
+					<li><a href="/restaurant_produse" class="btn brand z-depth-0">Produse</a></li>
+				</ul>
+			</div>
+		</nav>
+	</header>
+
+
+
+	<!-- sectiune care contine detaliile despre produse -->
+	{% for restaurant in restaurante: %}
+		<section class="container section" >
+			<h5>{% print("Produsele restaurantului din " + restaurant[6]) %}</h5>
+		</section>
+		<section class="container section" >
+			{% for res in result: %}
+				{% if (res[7] == restaurant[0]) : %}
+				<form action="" method="POST" class="formular_modifica">
+					<div class="row">
+						<div class="col l3">
+							<div class="input-field">
+								<input type="hidden" name="id_produs" value="{% print(res[0]) %}">
+								<input type="hidden" name="oras_restaurant_id" value="{% print(restaurant[0]) %}">
+								<textarea id="message" class="materialize-textarea" name="denumire">{% print(res[1]) %}</textarea>
+								<label for="denumire">Denumire</label>
+							</div>
+						</div>
+						<div class="col l3">
+							<div class="input-field">
+								<textarea id="message" class="materialize-textarea" name="ingrediente">{% print(res[2]) %}</textarea>
+								<label for="ingrediente">Ingrediente</label>
+							</div>
+						</div>
+						<div class="col l3">
+							<div class="input-field">
+								<textarea id="message" class="materialize-textarea" name="pret">{% print(res[3]) %}</textarea>
+								<label for="pret">Pret(lei)</label>
+							</div>
+						</div>
+						<div class="col l3">
+							<div class="center">
+								<input type="submit" name="sterge_produs" value="Sterge" class="btn brand z-depth-0">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col l3">
+							<div class="input-field">
+								<textarea id="message" class="materialize-textarea" name="gramaj">{% print(res[4]) %}</textarea>
+								<label for="gramaj">Gramaj</label>
+							</div>
+						</div>
+						<div class="col l3">
+							<div class="input-field">
+								<textarea id="message" class="materialize-textarea" name="stoc">{% print(res[6]) %}</textarea>
+								<label for="stoc">Stoc</label>
+							</div>
+						</div>
+						<div class="col l3">
+							<div class="input-field">
+								<textarea id="message" class="materialize-textarea" name="tip">{% print(res[5]) %}</textarea>
+								<label for="tip">Tip</label>
+							</div>
+						</div>
+						<div class="col l3">
+							<div class="center">
+								<input type="submit" name="modifica_produs" value="Modifica" class="btn brand z-depth-0">
+							</div>
+						</div>
+					</div>
+				</form>
+				{% endif %}
+			{% endfor %}
+		</section>
+	
+
+		<!-- sectiune prin care se poate adauga un produs -->
+		<section class="container section" >
+			<form action="" method="POST" class="formular_adauga">
+					<div class="row">
+						<div class="col l3">
+							<div class="input-field">
+								<input type="hidden" name="id_produs" value="">
+								<input type="hidden" name="oras_restaurant_id" value="{% print(restaurant[0]) %}">
+								<textarea id="message" class="materialize-textarea" name="denumire"></textarea>
+								<label for="denumire">Denumire</label>
+							</div>
+						</div>
+						<div class="col l3">
+							<div class="input-field">
+								<textarea id="message" class="materialize-textarea" name="ingrediente"></textarea>
+								<label for="ingrediente">Ingrediente</label>
+							</div>
+						</div>
+						<div class="col l3">
+							<div class="input-field">
+								<textarea id="message" class="materialize-textarea" name="pret"></textarea>
+								<label for="pret">Pret(lei)</label>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col l3">
+							<div class="input-field">
+								<textarea id="message" class="materialize-textarea" name="gramaj"></textarea>
+								<label for="gramaj">Gramaj</label>
+							</div>
+						</div>
+						<div class="col l3">
+							<div class="input-field">
+								<textarea id="message" class="materialize-textarea" name="stoc"></textarea>
+								<label for="stoc">Stoc</label>
+							</div>
+						</div>
+						<div class="col l3">
+							<div class="input-field">
+								<textarea id="message" class="materialize-textarea" name="tip"></textarea>
+								<label for="tip">Tip</label>
+							</div>
+						</div>
+						<div class="col l3">
+							<div class="center">
+								<input type="submit" name="adauga_produs" value="Adauga produs" class="btn brand z-depth-0 red">
+							</div>
+						</div>
+					</div>
+				</form>
+		</section>
+	{% endfor %}
+
+
+
+
+	
+
+
+
+	<footer class="section">
+		<div class="center grey-text">
+			Done.Finished
+		</div>
+	</footer>
+
+	<script>
+    	$(document).ready(function(){
+    		$('.sidenav').sidenav();
+    		$('.materialboxed').materialbox();
+    		$('.parallax').parallax();
+    		$('.tabs').tabs();
+    		$('.datepicker').datepicker(); 
+    		$('.tooltipped').tooltip();
+    		$('.scrollspy').scrollSpy();
+    	});
+    </script>
+
+
+</body>
+</html>

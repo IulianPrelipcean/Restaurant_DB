@@ -10,6 +10,11 @@ from siteapp.views.index import bp as index_bp
 
 from siteapp.views.iasi_meniu import bp as iasi_meniu_bp
 from siteapp.views.iasi_client import bp as iasi_client_bp
+from siteapp.views.restaurant_admin import bp as restaurant_admin_bp
+from siteapp.views.comenzi import bp as comenzi_bp
+from siteapp.views.restaurant_angajati import bp as restaurant_angajati_bp
+from siteapp.views.restaurant_produse import bp as restaurant_produse_bp
+
 
 app = Flask(__name__)
 
@@ -26,3 +31,7 @@ app.register_blueprint(index_bp)
 
 app.register_blueprint(iasi_meniu_bp)
 app.register_blueprint(iasi_client_bp)
+app.register_blueprint(restaurant_admin_bp)
+app.register_blueprint(comenzi_bp)
+app.register_blueprint(restaurant_angajati_bp)
+app.register_blueprint(restaurant_produse_bp)
