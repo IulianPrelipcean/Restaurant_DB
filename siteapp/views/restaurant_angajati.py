@@ -10,12 +10,28 @@ bp = Blueprint(__name__, __name__, template_folder='templates')
 
 def show():
 
-	# selectam toate detaliile despre restaurante 
 	mycursor = mydb.cursor()
 	sql = "SELECT * FROM restaurant"
 	#val = (id )
 	mycursor.execute(sql)
-	result = mycursor.fetchall()
+	restaurante = mycursor.fetchall()
+	
+
+	# selectam toate detaliile despre angajati 
+	mycursor = mydb.cursor()
+	sql = "SELECT * FROM angajat inner join detalii_angajat on (id_angajat=angajat_id_angajat);"
+	#val = (id )
+	mycursor.execute(sql)
+	angajati = mycursor.fetchall()
+	#print("id_man " + str(angajati[0][9]))
+	
+
+	# selectam toate detaliile despre managerii restaurantelor
+	mycursor = mydb.cursor()
+	sql = "SELECT * FROM angajat inner join detalii_angajat on (id_angajat=angajat_id_angajat) where pozitie='manager';"
+	#val = (id )
+	mycursor.execute(sql)
+	manageri = mycursor.fetchall()	
 
 
 	# for res in result:
@@ -30,58 +46,98 @@ def show():
 	# print(result[0][6])
 
 
-	# modificam detaliile despre restaurant
+	# modificam detaliile despre angajat
 	if request.method == 'POST':
-		if request.form.get('modifica_restaurant'):
-			id_restaurant = request.form.get('id_restaurant')
+		if request.form.get('modifica_angajat'):
+			id_angajat = request.form.get('id_angajat')
 			nume = request.form.get('nume')
-			adresa = request.form.get('adresa')
+			prenume = request.form.get('prenume')
 			telefon = request.form.get('telefon')
-			email = request.form.get('email')
-			program = request.form.get('program')
-			oras = request.form.get('oras')
-
-			sql = "UPDATE restaurant SET nume=%s, adresa=%s, telefon=%s, email=%s, program=%s, oras=%s where id_restaurant=%s"
-			val = (nume, adresa, telefon, email, program, oras, id_restaurant, )
-			mycursor.execute(sql, val)
-			mydb.commit()
-			
-			return redirect('restaurant_admin')
-
-
-	# stergem un restaurant
-	if request.method == 'POST':
-		if request.form.get('sterge_restaurant'):
 			id_restaurant = request.form.get('id_restaurant')
+			print("resa: "+ str(id_restaurant))
 
-			sql = "DELETE FROM restaurant where id_restaurant=%s"
-			val = (id_restaurant, )
+			adresa = request.form.get('adresa')
+			pozitie = request.form.get('pozitie')
+			id_manager = request.form.get('id_manager')
+			#data_angajare = request.form.get('data_angajare')
+			email = request.form.get('email')
+
+			# actualizam datele in tabela angajat
+			sql = "UPDATE angajat SET nume=%s, prenume=%s, restaurant_id_restaurant=%s, telefon=%s, email=%s where id_angajat=%s;"
+			val = (nume, prenume, id_restaurant, telefon, email, id_angajat, )
+			mycursor.execute(sql, val)
+			mydb.commit()
+
+			# actualizam datele in tabela detalii_angajat
+			sql = "UPDATE detalii_angajat SET angajat_id_angajat=%s, adresa=%s, pozitie=%s, id_manager=%s where angajat_id_angajat=%s"
+			val = (id_angajat, adresa, pozitie, id_manager, id_angajat)
+			mycursor.execute(sql, val)
+			mydb.commit()
+			
+			return redirect('restaurant_angajati')
+
+
+	# stergem un angajat
+	if request.method == 'POST':
+		if request.form.get('sterge_angajat'):
+			id_angajat = request.form.get('id_angajat')
+
+			sql = "DELETE FROM detalii_angajat where angajat_id_angajat=%s"
+			val = (id_angajat, )
+			mycursor.execute(sql, val)
+			mydb.commit()
+
+			sql = "DELETE FROM angajat where id_angajat=%s"
+			val = (id_angajat, )
 			mycursor.execute(sql, val)
 			mydb.commit()
 
 			
-			return redirect('restaurant_admin')
+			return redirect('restaurant_angajati')
 
 
 
 	# adaugam un nou restaurant
 	if request.method == 'POST':
-		if request.form.get('adauga_restaurant'):
+		if request.form.get('adauga_angajat'):
 			nume = request.form.get('nume')
-			adresa = request.form.get('adresa')
+			prenume = request.form.get('prenume')
 			telefon = request.form.get('telefon')
+			id_restaurant = request.form.get('id_restaurant')
+			adresa = request.form.get('adresa')
+			pozitie = request.form.get('pozitie')
+			id_manager = request.form.get('id_manager')
+			#data_angajare = request.form.get('data_angajare')
 			email = request.form.get('email')
-			program = request.form.get('program')
-			oras = request.form.get('oras')
-			print("aici " + str(adresa))
+			
+			# print("nume " + str(nume))
+			# print("id_restaurant " + str(id_restaurant))
+			#print("data " + str(data_angajare))
 
-			sql = "INSERT INTO restaurant(nume, adresa, telefon, email, program, oras) VALUES(%s, %s, %s, %s, %s, %s)"
-			val = (nume, adresa, telefon, email, program, oras, )
+
+			#print("aici " + str(adresa))
+
+			# inseram datele in tabela angajat
+			sql = "INSERT INTO angajat(nume, prenume, restaurant_id_restaurant, telefon, email) VALUES(%s, %s, %s, %s, %s)"
+			val = (nume, prenume, id_restaurant, telefon, email, )
+			mycursor.execute(sql, val)
+			mydb.commit()
+
+			# selectam angajatul introdus
+			sql = "SELECT * FROM angajat order by id_angajat desc"
+			#val = (nume, prenume, id_restaurant, telefon, email, )
+			mycursor.execute(sql)
+			angajat_temp = mycursor.fetchall()	
+			id_angajat_temp = angajat_temp[0][0]
+
+			# inseram datele in tabela detalii_angajat
+			sql = "INSERT INTO detalii_angajat(angajat_id_angajat, adresa, pozitie, id_manager) VALUES(%s, %s, %s, %s)"
+			val = (id_angajat_temp, adresa, pozitie, id_manager, )
 			mycursor.execute(sql, val)
 			mydb.commit()
 
 			
-			return redirect('restaurant_admin')
+			return redirect('restaurant_angajati')
 
 
-	return render_template('restaurant_produse.html', result=result)
+	return render_template('restaurant_angajati.html', restaurante=restaurante, angajati=angajati, manageri=manageri)

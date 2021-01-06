@@ -34,14 +34,23 @@ CREATE TABLE angajat (
 );
 
 CREATE TABLE detalii_angajat (
-    angajat_id_angajat  INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    serie               VARCHAR(20) NOT NULL,
-    numar               VARCHAR(6) NOT NULL,
+    angajat_id_angajat  INT NOT NULL,
+    -serie               VARCHAR(20) NOT NULL,
+    -numar               VARCHAR(6) NOT NULL,
     adresa              VARCHAR(50),
     pozitie             VARCHAR(20) NOT NULL,
-    tura                VARCHAR(10),
+    data_angajare       DATE,
+    -tura                VARCHAR(10),
     id_manager          INT,
-    FOREIGN KEY  (id_manager) REFERENCES angajat(id_angajat)
+    FOREIGN KEY  (angajat_id_angajat) REFERENCES angajat(id_angajat)
+);
+-- tabel 2
+CREATE TABLE detalii_angajat (
+    angajat_id_angajat  INT NOT NULL,
+    adresa              VARCHAR(50),
+    pozitie             VARCHAR(20) NOT NULL,
+    id_manager          INT,
+    FOREIGN KEY  (angajat_id_angajat) REFERENCES angajat(id_angajat)
 );
 
 CREATE TABLE client (

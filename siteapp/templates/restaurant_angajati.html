@@ -98,67 +98,120 @@
 
 
 
-	<!-- sectiune care contine detaliile despre restaurante -->
+	<!-- sectiune care contine detaliile despre angajati -->
 	<section class="container section" >
-		{% for res in result: %}
+		<h5>Angajati</h5>
+	</section>
+	<section class="container section" >
+		{% for angajat in angajati: %}
 			<form action="" method="POST" class="formular_modifica">
-				<div class="row">
-					<div class="col l3">
-						<div class="input-field">
-							<input type="hidden" name="id_restaurant" value="{% print(res[0]) %}">
-							<textarea id="message" class="materialize-textarea" name="nume">{% print(res[1]) %}</textarea>
-							<label for="nume">Nume</label>
-						</div>
-					</div>
-					<div class="col l3">
-						<div class="input-field">
-							<textarea id="message" class="materialize-textarea" name="adresa">{% print(res[2]) %}</textarea>
-							<label for="adresa">Adresa</label>
-						</div>
-					</div>
-					<div class="col l3">
-						<div class="input-field">
-							<textarea id="message" class="materialize-textarea" name="telefon">{% print(res[3]) %}</textarea>
-							<label for="telefon">Telefon</label>
-						</div>
-					</div>
-					<div class="col l3">
-						<div class="center">
-							<input type="submit" name="sterge_restaurant" value="Sterge" class="btn brand z-depth-0">
-						</div>
+			<div class="row">
+				<div class="col l3">
+					<div class="input-field">
+						<input type="hidden" name="id_angajat" value="{% print(angajat[0]) %}">
+						<textarea id="message" class="materialize-textarea" name="nume">{% print(angajat[1]) %}</textarea>
+						<label for="nume">Nume</label>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col l3">
-						<div class="input-field">
-							<textarea id="message" class="materialize-textarea" name="email">{% print(res[4]) %}</textarea>
-							<label for="email">Email</label>
-						</div>
-					</div>
-					<div class="col l3">
-						<div class="input-field">
-							<textarea id="message" class="materialize-textarea" name="program">{% print(res[5]) %}</textarea>
-							<label for="program">Program</label>
-						</div>
-					</div>
-					<div class="col l3">
-						<div class="input-field">
-							<textarea id="message" class="materialize-textarea" name="oras">{% print(res[6]) %}</textarea>
-							<label for="oras">Oras</label>
-						</div>
-					</div>
-					<div class="col l3">
-						<div class="center">
-							<input type="submit" name="modifica_restaurant" value="Modifica" class="btn brand z-depth-0">
-						</div>
+				<div class="col l3">
+					<div class="input-field">
+						<textarea id="message" class="materialize-textarea" name="prenume">{% print(angajat[2]) %}</textarea>
+						<label for="prenume">Prenume</label>
 					</div>
 				</div>
-			</form>
+				<div class="col l3">
+					<div class="input-field">
+						<textarea id="message" class="materialize-textarea" name="telefon">{% print(angajat[4]) %}</textarea>
+						<label for="telefon">Telefon</label>
+					</div>
+				</div>
+				<div class="col l3">
+					<div class="center">
+						<input type="submit" name="sterge_angajat" value="Sterge" class="btn brand z-depth-0">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col l3">
+					<div class="input-field">
+						<textarea id="message" class="materialize-textarea" name="adresa">{% print(angajat[7]) %}</textarea>
+						<label for="adresa">Adresa</label>
+					</div>
+				</div>
+				<div class="col l3">
+					<div class="input-field">
+						<input type="hidden" name="pozitie" value="{% print(angajat[8]) %}">
+						<select name = "pozitie">
+							<option value="" disabled selected>{% print(angajat[8]) %}</option>
+							<option value="manager">manager</option>
+							<option value="bucatar">bucatar</option>
+							<option value="curier">curier</option>
+							<option value="ajutor_bucatar">ajutor de bucatar</option>
+						</select>
+						<label for="pozitie">Pozitie</label>
+					</div>
+				</div>
+				<div class="col l3">
+					<div class="input-field">
+						<select name = "id_manager">
+							{% for man in manageri %}
+								{% if (man[0] == angajat[9]) %}
+									<option value="" disabled selected>{% print(man[1]) %}</option>
+								{% endif %}
+							{% endfor %}
+							{% for man in manageri %}
+								<option value="{% print(man[0]) %}">{% print(man[1]) %}</option>
+							{% endfor %}
+						</select>
+						<label for="superior">Superior</label>
+					</div>
+				</div>
+				<div class="col l3">
+					<div class="center">
+						<input type="submit" name="modifica_angajat" value="Modifica" class="btn brand z-depth-0">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<!-- <div class="col l3">
+					<div class="input-field">
+						<input type="text" id="date" class="datepicker" name="data_angajare">
+						<label for="data_angajare">Data angajare</label>
+					</div>
+				</div> -->
+				<div class="col l3">
+					<div class="input-field">
+						<textarea id="message" class="materialize-textarea" name="email">{% print(angajat[5]) %}</textarea>
+						<label for="email">Email</label>
+					</div>
+				</div>
+				<div class="col l3">
+					<div class="input-field">
+						{% for res in restaurante %}
+							{% if (res[0] == angajat[3]) %}
+								<input type="hidden" name="id_restaurant" value="{% print(res[0]) %}">
+							{% endif %}
+						{% endfor %}
+						<select name = "id_restaurant">
+							{% for res in restaurante %}
+								{% if (res[0] == angajat[3]) %}
+									<option value="" disabled selected>{% print(res[6]) %}</option>
+								{% endif %}
+							{% endfor %}
+							{% for res in restaurante %}
+								<option value="{% print(res[0]) %}">{% print(res[6]) %}</option>
+							{% endfor %}
+						</select>
+						<label for="restaurant">Oras Restaurant</label>
+					</div>
+				</div>
+			</div>
+		</form>
 		{% endfor %}
 	</section>
 
 
-	<!-- sectiune prin care se poate adauga un restaurant -->
+	<!-- sectiune in care se adauga un angajat -->
 	<section class="container section" >
 		<form action="" method="POST" class="formular_adauga">
 			<div class="row">
@@ -170,8 +223,8 @@
 				</div>
 				<div class="col l3">
 					<div class="input-field">
-						<textarea id="message" class="materialize-textarea" name="adresa"></textarea>
-						<label for="adresa">Adresa</label>
+						<textarea id="message" class="materialize-textarea" name="prenume"></textarea>
+						<label for="prenume">Prenume</label>
 					</div>
 				</div>
 				<div class="col l3">
@@ -184,30 +237,65 @@
 			<div class="row">
 				<div class="col l3">
 					<div class="input-field">
-						<textarea id="message" class="materialize-textarea" name="email"></textarea>
-						<label for="nume">Email</label>
+						<textarea id="message" class="materialize-textarea" name="adresa"></textarea>
+						<label for="adresa">Adresa</label>
 					</div>
 				</div>
 				<div class="col l3">
 					<div class="input-field">
-						<textarea id="message" class="materialize-textarea" name="program"></textarea>
-						<label for="email">Program</label>
+						<select name = "pozitie">
+							<option value="" disabled selected>Selectatia pozitia</option>
+							<option value="manager">manager</option>
+							<option value="bucatar">bucatar</option>
+							<option value="curier">curier</option>
+							<option value="ajutor_bucatar">ajutor de bucatar</option>
+						</select>
+						<label for="pozitie">Pozitie</label>
 					</div>
 				</div>
 				<div class="col l3">
 					<div class="input-field">
-						<textarea id="message" class="materialize-textarea" name="oras"></textarea>
-						<label for="email">Oras</label>
+						<select name = "id_manager">
+							<option value="" disabled selected>Selectati superior</option>
+							{% for man in manageri %}
+								<option value="{% print(man[0]) %}">{% print(man[1]) %}</option>
+							{% endfor %}
+						</select>
+						<label for="superior">Superior</label>
 					</div>
 				</div>
 				<div class="col l3">
 					<div class="center">
-						<input type="submit" name="adauga_restaurant" value="Adauga Restautant" class="btn brand z-depth-0 red">
+						<input type="submit" name="adauga_angajat" value="Adauga angajat" class="btn brand z-depth-0 red">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<!-- <div class="col l3">
+					<div class="input-field">
+						<input type="text" id="date" class="datepicker" name="data_angajare">
+						<label for="data_angajare">Data angajare</label>
+					</div>
+				</div> -->
+				<div class="col l3">
+					<div class="input-field">
+						<textarea id="message" class="materialize-textarea" name="email"></textarea>
+						<label for="email">Email</label>
+					</div>
+				</div>
+				<div class="col l3">
+					<div class="input-field">
+						<select name = "id_restaurant">
+							<option value="" disabled selected>Selectati orasul</option>
+							{% for res in restaurante %}
+								<option value="{% print(res[0]) %}">{% print(res[6]) %}</option>
+							{% endfor %}
+						</select>
+						<label for="restaurant">Oras restaurant</label>
 					</div>
 				</div>
 			</div>
 		</form>
-		
 	</section>
 
 
@@ -233,6 +321,9 @@
     		$('.datepicker').datepicker(); 
     		$('.tooltipped').tooltip();
     		$('.scrollspy').scrollSpy();
+    		$('.dropdown-trigger').dropdown();
+    		$('select').formSelect();
+
     	});
     </script>
 
