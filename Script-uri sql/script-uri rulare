@@ -12,3 +12,14 @@ source /home/iulian0user/Facultate/Anul 3/BD/BD-Tema/Tema_de_casa_bd/Tema_de_cas
 select * from produs 
     inner join comanda_detalii on (id_produs=produs_id_produs)
     where comanda_id_comanda = 1;
+
+{% if (angajat[9] == None) %}
+
+
+    
+{% for client in clienti: %}
+    {% if(comanda[4] == client[0]): %}
+        {% print(client[0]) %}
+        {% print(comanda[4]) %}
+    {% endif %}
+{% endfor %}

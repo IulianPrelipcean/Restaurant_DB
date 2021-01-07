@@ -53,11 +53,29 @@
 		}
 		.p_author{
 			font-family:"Times New Roman", Times, serif;
-			font-size:15px;
+			font-size:17px;
 			color: black;
 			padding: 0px;
 			margin: 0px;
 			border: 0px;
+		}
+		.formular_modifica{
+			border-style: solid; 
+			border-top-style: none; 
+			border-left-style: none;
+			border-radius: 20px; 
+			border-color: black; 
+			border-width: 2px; 
+			margin-bottom:30px;
+		}
+		.modal_modification{
+			width:90%;
+		}
+		.modal_text{
+			font-family:"Times New Roman", Times, serif;
+			font-size:15px;
+			font-color:red;
+			color: black;
 		}
 	</style>
 
@@ -66,67 +84,173 @@
 	<header class="header">
 		<nav  class="nav-wraper nav_setup">
 			<div class="container">
-				<div class="row">
-					<div class="col s12 l2">
-						<a href="/" class=" left brand-logo brand-text">La Stejar</a>
-					</div>
-					<div class="col s12 l3">
-						<p class="p_author">Telefon: {% print(detalii_resturant[0][1]) %}</p>
-					</div>
-					<div class="col s12 l3">
-						<p class="p_author">Adresa: {% print(detalii_resturant[0][2]) %}</p>
-					</div>
-				</div>
+				<a href="/" class=" left brand-logo brand-text">La Stejar</a>
+				<ul id="nav-mobile"  class="right hide-on-small-right">
+					<li><a href="/restaurant_admin" class="btn brand z-depth-0">Restaurante</a></li>
+					<li><a href="/restaurant_angajati" class="btn brand z-depth-0">Angajati</a></li>
+					<li><a href="/comenzi" class="btn brand z-depth-0">Comenzi</a></li>
+					<li><a href="/restaurant_produse" class="btn brand z-depth-0">Produse</a></li>
+				</ul>
 			</div>
 		</nav>
 	</header>
 
 
 
-	<!-- tabelul pentru meniu -->
-	<section class="container section">
-		<table>
-	        <thead>
-				<tr>
-					<th>Denumire</th>
-					<th>Ingrediente</th>
-					<th>Gramaj</th>
-					<th>Pret</th>
-					<th>Cantitate</th>
-					
-				</tr>
-	        </thead>
-
-	        <tbody>
-	        	{% for res in result: %}
-					<tr>
-						<td>{% print(res[1]) %}</td>
-						<td>{% print(res[2]) %}</td>
-						<td>{% print(res[4]) %}</td>
-						<td>{% print(res[3]) %}</td>
-						<td>
-							<div class="row">
-								<div class="col s12 l4">
-									<form style="padding:0px; margin:0px;" class="formular" method="POST">
-										<input type="hidden" name="id_produs" value="{% print(res[0]) %}">
-										<div class="row">
-											<div class="col s12 l5">
-												<input type="text" name="cantitate_val" value="0">	
+	<!-- tabelul pentru comenzi -->	
+	<ul class="collapsible">
+		{% for res in restaurante: %}
+			<li>
+				<div class="collapsible-header"><i class="material-icons"></i><h5>Comenzi restaurant {% print(res[6]) %}</h5></div>
+				<div class="collapsible-body">
+					<section class="container section" >
+						{% for comanda in comenzi: %}
+							{% if (comanda[5] == res[0]): %}
+								<form action="" method="POST" class="formular_modifica">
+								<div class="row">
+									<div class="col l3">
+										<div class="input-field">
+											<input type="hidden" name="id_client" value="{% print(comanda[4]) %}">
+											<input type="hidden" name="id_comanda" value="{% print(comanda[0]) %}">
+											<textarea id="message" class="materialize-textarea" name="cod_comanda">{% print(comanda[0]) %}</textarea>
+											<label for="cod_comanda">Cod comanda</label>
+										</div>
+									</div>
+									<div class="col l3">
+										<div class="input-field">
+											<textarea id="message" class="materialize-textarea" name="data_preluare">{% print(comanda[1]) %}</textarea>
+											<label for="data_preluare">Data preluare</label>
+										</div>
+									</div>
+									<div class="col l3">
+										<div class="input-field">
+											<textarea id="message" class="materialize-textarea" name="data_livrare">{% print(comanda[2]) %}</textarea>
+											<label for="data_livrare">Data livrare</label>
+										</div>
+									</div>
+									<div class="col l3">
+										<div class="center">
+											<input type="submit" name="modifica_comanda" value="Actualizeaza" class="btn brand z-depth-0">
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col l3">
+										
+										<a class="waves-effect waves-light btn modal-trigger" href="#" data-target='{% print(comanda[4], comanda[0]) %}'>Detalii client</a>
+										
+										<div id="{% print(comanda[4], comanda[0]) %}" class="modal">
+											<div class="modal-content">
+												<section class="container section">
+													{% for client in clienti: %}
+														{% if(comanda[4] == client[0]): %}
+															<div class="row">
+																<div class="col l4">
+																	<label for="cod_client"><p class="p_author">Cod client</p></label>
+																	<input disabled value="{% print(client[0]) %}" id="disabled" type="text" class="modal_text">
+																</div>
+																<div class="col l4">
+																	<label for="disabled"><p class="p_author">Nume</p></label>
+																	<input disabled value="{% print(client[1]) %}" id="disabled" type="text" class="validate">
+																</div>
+																<div class="col l4">
+																	<label for="disabled"><p class="p_author">Telefon</p></label>
+																	<input disabled value="{% print(client[2]) %}" id="disabled" type="text" class="validate">
+																</div>
+																<div class="col l4">
+																	<label for="disabled"><p class="p_author">Adresa</p></label>
+																	<input disabled value="{% print(client[3]) %}" id="disabled" type="text" class="validate">
+																</div>
+																<div class="col l4">
+																	<label for="disabled"><p class="p_author">Email</p></label>
+																	<input disabled value="{% print(client[4]) %}" id="disabled" type="text" class="validate">
+																</div>
+															</div>
+														{% endif %}	
+													{% endfor %}
+												</section>
 											</div>
-											<div class="col s12 l2">
-												<input type="submit" name="adauga_produs", value="Adauga" class="btn brand z-depth-0" >
+											<div class="modal-footer">
+												<a href="#!" class="modal-close waves-effect waves-green btn-flat">Inchide</a>
 											</div>
 										</div>
-									</form> 
-								</div>
-							</div>
-						</td>
-					</tr>
-				{% endfor %}
-	        </tbody>
-      </table>
-	</section>
 
+									</div>
+									<div class="col l3">
+										<a class="waves-effect waves-light btn modal-trigger" href="#" data-target='{% print(comanda[4]) %}'>Detalii comanda</a>
+										
+										<div id="{% print(comanda[4]) %}" class="modal">
+											<div class="modal-content">
+												<section class="container section">
+													{% for comanda_det in detalii_comanda: %}
+														{% if(comanda[0] == comanda_det[0]): %}
+														<div class="formular_modifica">
+															<div class="row">
+																<div class="col l4">
+																	<label for="cod_client"><p class="p_author">Denumire produs</p></label>
+																	<input disabled value="{% print(comanda_det[13]) %}" id="disabled" type="text" class="modal_text">
+																</div>
+																<div class="col l8">
+																	<label for="disabled"><p class="p_author">Ingrediente</p></label>
+																	<input disabled value="{% print(comanda_det[14]) %}" id="disabled" type="text" class="validate">
+																</div>
+															</div>
+															<div class="row ">
+																<div class="col l4">
+																	<label for="disabled"><p class="p_author">Cantitate</p></label>
+																	<input disabled value="{% print(comanda_det[8]) %}" id="disabled" type="text" class="validate">
+																</div>
+																<div class="col l4">
+																	<label for="disabled"><p class="p_author">Pret(lei)</p></label>
+																	<input disabled value="{% print(comanda_det[15]) %}" id="disabled" type="text" class="validate">
+																</div>
+															</div>
+														</div>
+														{% endif %}	
+													{% endfor %}
+												</section>
+											</div>
+											<div class="modal-footer">
+												<a href="#!" class="modal-close waves-effect waves-green btn-flat">Inchide</a>
+											</div>
+										</div>
+									</div>
+									<div class="col l3">
+										<div class="input-field">
+											<select name = "id_angajat">
+												{% if (comanda[3] == None): %}
+													<option value="" disabled selected>None</option>
+												{% else: %}
+													{% for angajat in angajati: %}
+														{% if (angajat[0] == comanda[3] ) : %}
+															<option value="" disabled selected>{% print(angajat[0]) %} - {% print(angajat[1]) %}</option>
+														{% endif %}
+													{% endfor %}
+												{% endif %}
+
+												{% for angajat in angajati: %}
+													{% if (angajat[3] == comanda[5]): %}
+														<option value="{% print(angajat[0]) %}">{% print(angajat[0]) %} - {% print(angajat[1]) %}</option>
+													{% endif %}
+												{% endfor %}
+											</select>
+											<label for="cod_andajat">Cod angajat - nume</label>
+										</div>
+									</div>
+									<div class="col l3">
+										<div class="center">
+											<input type="submit" name="preia_comanda" value="Preia coamnda" class="btn brand z-depth-0">
+										</div>
+									</div>
+								</div>
+								</form>
+							{% endif %}
+						{% endfor %}
+					</section>
+				</div>
+			</li>
+		{% endfor %}
+	</ul>
 
 	<!-- butonul pentru a merge catre completarea datelor clientului //pt a valida comanda-->
 	<section class="container section">
@@ -162,11 +286,15 @@
     	$(document).ready(function(){
     		$('.sidenav').sidenav();
     		$('.materialboxed').materialbox();
-    		$('.parallax').parallax();
-    		$('.tabs').tabs();
-    		$('.datepicker').datepicker(); 
-    		$('.tooltipped').tooltip();
-    		$('.scrollspy').scrollSpy();
+    		// $('.parallax').parallax();
+    		// $('.tabs').tabs();
+    		// $('.datepicker').datepicker(); 
+    		// $('.tooltipped').tooltip();
+    		// $('.scrollspy').scrollSpy();
+    		$('.collapsible').collapsible();
+    		$('.modal').modal();
+    		$('.dropdown-trigger').dropdown();
+    		$('select').formSelect();
     	});
     </script>
 

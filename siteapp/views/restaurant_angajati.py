@@ -33,6 +33,7 @@ def show():
 	mycursor.execute(sql)
 	manageri = mycursor.fetchall()	
 
+	
 
 	# for res in result:
 	# 	print(res)
@@ -54,8 +55,6 @@ def show():
 			prenume = request.form.get('prenume')
 			telefon = request.form.get('telefon')
 			id_restaurant = request.form.get('id_restaurant')
-			print("resa: "+ str(id_restaurant))
-
 			adresa = request.form.get('adresa')
 			pozitie = request.form.get('pozitie')
 			id_manager = request.form.get('id_manager')
@@ -109,6 +108,8 @@ def show():
 			id_manager = request.form.get('id_manager')
 			#data_angajare = request.form.get('data_angajare')
 			email = request.form.get('email')
+
+
 			
 			# print("nume " + str(nume))
 			# print("id_restaurant " + str(id_restaurant))
@@ -129,6 +130,10 @@ def show():
 			mycursor.execute(sql)
 			angajat_temp = mycursor.fetchall()	
 			id_angajat_temp = angajat_temp[0][0]
+
+
+			if(id_manager == None):
+				id_manager = id_angajat_temp
 
 			# inseram datele in tabela detalii_angajat
 			sql = "INSERT INTO detalii_angajat(angajat_id_angajat, adresa, pozitie, id_manager) VALUES(%s, %s, %s, %s)"

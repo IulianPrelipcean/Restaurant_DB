@@ -10,30 +10,53 @@ bp = Blueprint(__name__, __name__, template_folder='templates')
 
 def show():
 
-	# selectam produsele pentru a le afisa in tabel
-	id_produs = 2
 	mycursor = mydb.cursor()
+
+	# selectam toate restaurantele
+	id_produs = 2
+	sql = "SELECT * FROM restaurant "
+	val = ( )
+	mycursor.execute(sql)
+	restaurante = mycursor.fetchall()
+
+
+	# selectam produsele pentru a le afisa in tabel
 	sql = "SELECT * FROM produs where stoc > 0 and restaurant_id_restaurant=(select id_restaurant from restaurant where oras='Suceava')"		#de modificat Iasi
 	val = (id_produs, )
 	mycursor.execute(sql)
 	result = mycursor.fetchall()
 
-	# for res in result:
-	# 	print(res)
 
-	# print(result[0][0])
-	# print(result[0][1])
-	# print(result[0][2])
-	# print(result[0][3])
-	# print(result[0][4])
-	# print(result[0][5])
-	# print(result[0][6])
-
-
-	# selectam numarul de telefon si adresa
-	sql = "SELECT id_restaurant, telefon, adresa FROM restaurant where oras='Iasi'"		#de modificat Iasi
+	# selectam comenzile pentru a le afisa in tabel
+	sql = "SELECT * FROM comanda;"
+	val = (id_produs, )
 	mycursor.execute(sql)
-	detalii_resturant = mycursor.fetchall()
+	comenzi = mycursor.fetchall()
+
+	# selectam clientii pentru a-i afisa in tabel
+	sql = "SELECT * FROM client;"
+	val = (id_produs, )
+	mycursor.execute(sql)
+	clienti = mycursor.fetchall()
+	#print(clienti)
+
+
+	# selectam toate detaliile despre angajati 
+	mycursor = mydb.cursor()
+	sql = "SELECT * FROM angajat inner join detalii_angajat on (id_angajat=angajat_id_angajat) where pozitie = 'curier';"
+	#val = (id )
+	mycursor.execute(sql)
+	angajati = mycursor.fetchall()
+
+
+	# selectam toate comenzile cu detaliile lo
+	id_produs = 2
+	sql = "select * from comanda inner join comanda_detalii on (id_comanda=comanda_id_comanda) inner join produs on (id_produs=produs_id_produs);"
+ 	#val = (,)
+	mycursor.execute(sql)
+	detalii_comanda = mycursor.fetchall()
+
+
 
 
 
@@ -149,12 +172,25 @@ def show():
 			mycursor.execute(sql, val)
 			mydb.commit()
 
-
-
 			#return redirect('comanda_client')
 			return redirect('iasi_client')
 
 
 
+	# asignam comanda unui curier
+	if request.method == 'POST':
+		if request.form.get('preia_comanda'):
+			id_angajat = request.form.get('id_angajat')
+			id_comanda = request.form.get('id_comanda')
+				
 
-	return render_template('comenzi.html', result=result, detalii_resturant=detalii_resturant)
+			sql = "UPDATE comanda SET angajat_id_angajat=%s where id_comanda=%s"
+			val = (id_angajat, id_comanda, ) 
+			mycursor.execute(sql, val)
+			mydb.commit()
+
+			return redirect('comenzi')
+
+
+
+	return render_template('comenzi.html', detalii_comanda=detalii_comanda, result=result, clienti=clienti, angajati=angajati, restaurante=restaurante, comenzi=comenzi)
