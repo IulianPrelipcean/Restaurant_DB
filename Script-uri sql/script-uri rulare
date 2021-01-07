@@ -23,3 +23,6 @@ select * from produs
         {% print(comanda[4]) %}
     {% endif %}
 {% endfor %}
+
+
+alter table comanda add status_livarare decimal(2);

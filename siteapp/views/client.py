@@ -4,7 +4,7 @@ from siteapp.config.db_connect import mydb
 bp = Blueprint(__name__, __name__, template_folder='templates')
 
 
-@bp.route('/iasi_client', methods=['POST', 'GET'])
+@bp.route('/client', methods=['POST', 'GET'])
 
 
 
@@ -72,7 +72,7 @@ def show():
 			mycursor.execute(sql, val)
 			mydb.commit()
 
-			return redirect('iasi_client')
+			return redirect('client')
 
 
 	# creeam o inregistrare in tabela client
@@ -125,4 +125,4 @@ def show():
 
 
 
-	return render_template('iasi_client.html', result=result, detalii_resturant=detalii_resturant)
+	return render_template('client.html', result=result, detalii_resturant=detalii_resturant)

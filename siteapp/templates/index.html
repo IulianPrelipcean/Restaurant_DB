@@ -77,16 +77,23 @@
 		</div>
 		<div class='row'>
 			<div class='center'>
-				<a href="/iasi_meniu" class="btn brand z-depth-0" style="font-size:20px;">Iasi</a>
-				<a href="/cluj_meniu" class="btn brand z-depth-0" style="font-size:20px;">Cluj</a>
-				<a href="/suceava_meniu" class="btn brand z-depth-0" style="font-size:20px;">Suceava</a>
-				<a href="/restaurant_admin" class="btn brand z-depth-0" style="font-size:20px;">-></a>
+				<form action="" method="POST" class="">
+					{% for restaurant in restaurante: %}
+						<input type="hidden" name="id_restaurant" value="{% print(restaurant[0]) %}">
+						<input type="submit" name="alege_restaurant" value="{% print(restaurant[6]) %}" class="btn brand z-depth-0">
+						<!-- <a href="/iasi_meniu" class="btn brand z-depth-0" style="font-size:20px;">restaurant[6]</a> -->
+					{% endfor %}
+				</form>
 			</div>
 		</div>
 	</div>		
 
-
-
+<!-- 
+<a href="/iasi_meniu" class="btn brand z-depth-0" style="font-size:20px;">Iasi</a>
+<a href="/cluj_meniu" class="btn brand z-depth-0" style="font-size:20px;">Cluj</a>
+<a href="/suceava_meniu" class="btn brand z-depth-0" style="font-size:20px;">Suceava</a>
+ -->
+<a href="/restaurant_admin" class="btn brand z-depth-0" style="font-size:20px;">-></a>
 
 
 

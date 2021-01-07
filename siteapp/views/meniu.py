@@ -4,7 +4,7 @@ from siteapp.config.db_connect import mydb
 bp = Blueprint(__name__, __name__, template_folder='templates')
 
 
-@bp.route('/iasi_meniu', methods=['POST', 'GET'])
+@bp.route('/meniu', methods=['POST', 'GET'])
 
 
 
@@ -13,7 +13,7 @@ def show():
 	# selectam produsele pentru a le afisa in tabel
 	id_produs = 2
 	mycursor = mydb.cursor()
-	sql = "SELECT * FROM produs where stoc > 0 and restaurant_id_restaurant=(select id_restaurant from restaurant where oras='Suceava')"		#de modificat Iasi
+	sql = "SELECT * FROM produs where stoc > 0 and restaurant_id_restaurant=(select restaurant_id_restaurant from comanda order by id_comanda desc limit 1)"
 	val = (id_produs, )
 	mycursor.execute(sql)
 	result = mycursor.fetchall()
@@ -44,7 +44,7 @@ def show():
 			id_produs = request.form.get('id_produs')
 				
 			if (int(cantitate) > 0):
-				#verificam daca sunt sificiente stocuri
+				#verificam daca sunt suficiente stocuri
 				sql = "SELECT stoc from produs where id_produs=%s"
 				val = (id_produs, ) 
 				mycursor.execute(sql, val)
@@ -152,9 +152,9 @@ def show():
 
 
 			#return redirect('comanda_client')
-			return redirect('iasi_client')
+			return redirect('client')
 
 
 
 
-	return render_template('iasi_meniu.html', result=result, detalii_resturant=detalii_resturant)
+	return render_template('meniu.html', result=result, detalii_resturant=detalii_resturant)

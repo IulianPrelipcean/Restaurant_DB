@@ -130,7 +130,7 @@
 									</div>
 									<div class="col l3">
 										<div class="center">
-											<input type="submit" name="modifica_comanda" value="Actualizeaza" class="btn brand z-depth-0">
+											<input type="submit" name="actualizeaza_comanda" value="Actualizeaza" class="btn brand z-depth-0">
 										</div>
 									</div>
 								</div>
@@ -188,21 +188,21 @@
 															<div class="row">
 																<div class="col l4">
 																	<label for="cod_client"><p class="p_author">Denumire produs</p></label>
-																	<input disabled value="{% print(comanda_det[13]) %}" id="disabled" type="text" class="modal_text">
+																	<input disabled value="{% print(comanda_det[2]) %}" id="disabled" type="text" class="modal_text">
 																</div>
 																<div class="col l8">
 																	<label for="disabled"><p class="p_author">Ingrediente</p></label>
-																	<input disabled value="{% print(comanda_det[14]) %}" id="disabled" type="text" class="validate">
+																	<input disabled value="{% print(comanda_det[3]) %}" id="disabled" type="text" class="validate">
 																</div>
 															</div>
 															<div class="row ">
 																<div class="col l4">
 																	<label for="disabled"><p class="p_author">Cantitate</p></label>
-																	<input disabled value="{% print(comanda_det[8]) %}" id="disabled" type="text" class="validate">
+																	<input disabled value="{% print(comanda_det[4]) %}" id="disabled" type="text" class="validate">
 																</div>
 																<div class="col l4">
 																	<label for="disabled"><p class="p_author">Pret(lei)</p></label>
-																	<input disabled value="{% print(comanda_det[15]) %}" id="disabled" type="text" class="validate">
+																	<input disabled value="{% print(comanda_det[5]) %}" id="disabled" type="text" class="validate">
 																</div>
 															</div>
 														</div>
@@ -218,29 +218,47 @@
 									<div class="col l3">
 										<div class="input-field">
 											<select name = "id_angajat">
-												{% if (comanda[3] == None): %}
-													<option value="" disabled selected>None</option>
-												{% else: %}
+												{% if(comanda[7] == 1): %}	<!-- // punem pe disable daca comanda inca nu este gata de livrare -->
+													{% if (comanda[3] == None): %}
+														<option value="" disabled selected>None</option>
+													{% else: %}
+														{% for angajat in angajati: %}
+															{% if (angajat[0] == comanda[3] ) : %}
+																<option value="" disabled selected>{% print(angajat[0]) %} - {% print(angajat[1]) %}</option>
+															{% endif %}
+														{% endfor %}
+													{% endif %}
+
 													{% for angajat in angajati: %}
-														{% if (angajat[0] == comanda[3] ) : %}
-															<option value="" disabled selected>{% print(angajat[0]) %} - {% print(angajat[1]) %}</option>
+														{% if (angajat[3] == comanda[5]): %}
+															<option value="{% print(angajat[0]) %}">{% print(angajat[0]) %} - {% print(angajat[1]) %}</option>
 														{% endif %}
 													{% endfor %}
-												{% endif %}
-
-												{% for angajat in angajati: %}
-													{% if (angajat[3] == comanda[5]): %}
-														<option value="{% print(angajat[0]) %}">{% print(angajat[0]) %} - {% print(angajat[1]) %}</option>
-													{% endif %}
-												{% endfor %}
+												{% else: %}
+													<option value="" disabled selected>None</option>
+												{% endif %}	
 											</select>
 											<label for="cod_andajat">Cod angajat - nume</label>
 										</div>
 									</div>
 									<div class="col l3">
 										<div class="center">
-											<input type="submit" name="preia_comanda" value="Preia coamnda" class="btn brand z-depth-0">
+											<input type="submit" name="preia_comanda" value="Preia comanda" class="btn brand z-depth-0">
 										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col l3">
+										<p>
+									      <label>
+									      	{% if (comanda[7] == 1): %}
+									      		<input type="checkbox" class="filled-in" checked="checked" />
+									      	{% else: %}
+									        	<input type="checkbox" name="gata_de_livrare">
+									        {% endif %}
+									        <span>Gata de livrare</span>
+									      </label>
+									    </p>
 									</div>
 								</div>
 								</form>
