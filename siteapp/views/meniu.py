@@ -10,24 +10,14 @@ bp = Blueprint(__name__, __name__, template_folder='templates')
 
 def show():
 
+	errors = {"cantitate": ' cantiate pre mare', "id_produs": ' '}
 	# selectam produsele pentru a le afisa in tabel
 	id_produs = 2
 	mycursor = mydb.cursor()
 	sql = "SELECT * FROM produs where stoc > 0 and restaurant_id_restaurant=(select restaurant_id_restaurant from comanda order by id_comanda desc limit 1)"
 	val = (id_produs, )
 	mycursor.execute(sql)
-	result = mycursor.fetchall()
-
-	# for res in result:
-	# 	print(res)
-
-	# print(result[0][0])
-	# print(result[0][1])
-	# print(result[0][2])
-	# print(result[0][3])
-	# print(result[0][4])
-	# print(result[0][5])
-	# print(result[0][6])
+	produse = mycursor.fetchall()
 
 
 	# selectam numarul de telefon si adresa
@@ -44,7 +34,7 @@ def show():
 			id_produs = request.form.get('id_produs')
 				
 			if (int(cantitate) > 0):
-				#verificam daca sunt suficiente stocuri
+				#verificam daca sunt suficiente produse in stoc
 				sql = "SELECT stoc from produs where id_produs=%s"
 				val = (id_produs, ) 
 				mycursor.execute(sql, val)
@@ -66,15 +56,21 @@ def show():
 					mycursor.execute(sql, val)
 					mydb.commit()
 
-				else:
-					print("mesag de informare, cantitate insuficienta!!")
+					errors['cantitate'] = ''
+					errors['id_produs'] = ''
 
-				
+					return redirect('meniu')
+
+				else:
+					print("mesag de informare, cantitate insuficienta in stoc!!")
+					errors['cantitate'] = 'cantitate prea mare !'
+					errors['id_produs'] = int(id_produs)
 
 			else:
 				print("\ncantiate nula\n")
+				
 
-			return redirect('iasi_meniu')
+			
 
 
 	# creeam o inregistrare pentru comanda si asignam comenzii toate produsele adaugate pana acum(care au status=1)
@@ -157,4 +153,4 @@ def show():
 
 
 
-	return render_template('meniu.html', result=result, detalii_resturant=detalii_resturant)
+	return render_template('meniu.html', produse=produse, detalii_resturant=detalii_resturant, errors=errors)

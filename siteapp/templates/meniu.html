@@ -98,26 +98,31 @@
 	        </thead>
 
 	        <tbody>
-	        	{% for res in result: %}
+	        	{% for produs in produse: %}
 					<tr>
-						<td>{% print(res[1]) %}</td>
-						<td>{% print(res[2]) %}</td>
-						<td>{% print(res[4]) %}</td>
-						<td>{% print(res[3]) %}</td>
+						<td>{% print(produs[1]) %}</td>
+						<td>{% print(produs[2]) %}</td>
+						<td>{% print(produs[4]) %}</td>
+						<td>{% print(produs[3]) %}</td>
 						<td>
 							<div class="row">
 								<div class="col s12 l4">
 									<form style="padding:0px; margin:0px;" class="formular" method="POST">
-										<input type="hidden" name="id_produs" value="{% print(res[0]) %}">
+										<input type="hidden" name="id_produs" value="{% print(produs[0]) %}">
 										<div class="row">
-											<div class="col s12 l5">
+											<div class="col s2 l5">
 												<input type="text" name="cantitate_val" value="0">	
 											</div>
-											<div class="col s12 l2">
+											<div class="col s2 l2">
 												<input type="submit" name="adauga_produs", value="Adauga" class="btn brand z-depth-0" >
 											</div>
 										</div>
 									</form> 
+								</div>
+								<div class="col s12 l4">
+									{% if (errors['id_produs'] == produs[0]) %}
+										<p class="center red-text">{% print("  " + errors['cantitate'] ) %}</p>
+									{% endif %}
 								</div>
 							</div>
 						</td>

@@ -80,7 +80,7 @@
 				<form action="" method="POST" class="">
 					{% for restaurant in restaurante: %}
 						<input type="hidden" name="id_restaurant" value="{% print(restaurant[0]) %}">
-						<input type="submit" name="alege_restaurant" value="{% print(restaurant[6]) %}" class="btn brand z-depth-0">
+						<input type="submit" name="alege_restaurant" value="{% print(restaurant[6]) %}" class="btn-large brand z-depth-0 p_author">
 						<!-- <a href="/iasi_meniu" class="btn brand z-depth-0" style="font-size:20px;">restaurant[6]</a> -->
 					{% endfor %}
 				</form>
