@@ -11,6 +11,15 @@ bp = Blueprint(__name__, __name__, template_folder='templates')
 
 def show():
 	
+	mycursor = mydb.cursor()
+
+
+	# sql = "SELECT SYSDATE()";
+	# mycursor.execute(sql)
+	# data_preluare = mycursor.fetchall()
+	# print("data aeste : ", data_preluare[0][0])
+	# print("data aeste : ", data_preluare[0][0].year)
+	# print("data aeste : ", data_preluare[0][0].second)
 
 
 	# array folosit pentru mesajele de eroare in cazul valorilor invalide din formular
@@ -20,7 +29,7 @@ def show():
 	detalii_formular_invalid = {"nume":'', "telefon":'', "adresa": '', "email": '', "conditie":'0'}
 
 
-	mycursor = mydb.cursor()
+	
 
 	# aflam id-ul comenzii 
 	sql = "SELECT id_comanda from comanda order by id_comanda desc limit 1";
@@ -87,13 +96,11 @@ def show():
 			email = request.form.get('email')
 
 
-
-
 			# stabilim toate conditiile necesare validarii formularului
 			conditie = 0	# toate campurile sunt corecte
 
 			# verificare numar telefon
-			#telefon_validare = re.match('^0(2|7)\d{8}$', telefon)
+			#telefon_validare = re.match('^0(2|7)\d{8}$', telefon)  	# alta varianta
 			temp = re.compile('^0(2|7)\d{8}$')
 			telefon_validare = temp.match(telefon)
 			print("te : " , telefon_validare)
@@ -109,7 +116,6 @@ def show():
 				conditie = 1
 
 			# vericare adresa email
-			#temp = re.compile
 			email_validare = re.match('[a-z0-9._%-]+@[a-z0-9._%-]+\.[a-z]{2,4}', email)
 			if (email_validare == None and len(email)>0):
 				print('email invalid')
@@ -126,6 +132,11 @@ def show():
 
 			if(conditie == 0):		# datele sunt valide
 
+				# selectam data curenta pentru a o folosi in campul data_preluare
+				sql = "SELECT SYSDATE()";
+				mycursor.execute(sql)
+				data_preluare = mycursor.fetchall()
+
 				#creeam o inregistrare pentru client
 				sql = "INSERT INTO client(nume, telefon, adresa, email) VALUES(%s, %s, %s, %s);"
 				val = (nume, telefon, adresa, email,) 
@@ -139,7 +150,7 @@ def show():
 				client = mycursor.fetchall()
 				print("\n client_id : " + str(client[0][0]))
 
-				# extragem id-ul comnezii 
+				# extragem id-ul comenzii 
 				sql = "SELECT id_comanda FROM comanda order by id_comanda desc limit 1;"
 				mycursor.execute(sql)
 				comanda = mycursor.fetchall()
@@ -147,8 +158,8 @@ def show():
 				print("\n comanda_id : " + str(comanda[0][0]))
 
 				# adaugam id-ul clientului in tabela comanda [si data_prelucrare !!!!! ( de facut)]
-				sql = "UPDATE comanda SET client_id_client=%s where id_comanda=%s"
-				val = (client[0][0], comanda[0][0])
+				sql = "UPDATE comanda SET client_id_client=%s, data_preluare=%s where id_comanda=%s"
+				val = (client[0][0], data_preluare[0][0], comanda[0][0])
 				mycursor.execute(sql, val)
 				mydb.commit()
 

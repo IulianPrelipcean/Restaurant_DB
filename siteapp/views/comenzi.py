@@ -32,6 +32,8 @@ def show():
 	val = (id_produs, )
 	mycursor.execute(sql)
 	comenzi = mycursor.fetchall()
+	for comanda in comenzi:
+		print(comanda[1])
 
 	# selectam clientii pentru a-i afisa in tabel
 	sql = "SELECT * FROM client;"
@@ -68,7 +70,7 @@ def show():
 			id_produs = request.form.get('id_produs')
 
 			#print("status: ", status_livrare)
-			if(status_livrare == 'on'):
+			if(status_livrare == 'on'):		# status primit de la butonul de check (Gata de livrare)
 				status_db = 1
 			else:
 				status_db = 1
@@ -97,6 +99,27 @@ def show():
 
 			return redirect('comenzi')
 
+
+	#finalizam comanda si adaugam data de livrare
+	if request.method == 'POST':
+		if request.form.get('marcheaza_ca_livrata'):
+			id_comanda = request.form.get('id_comanda')
+			status_livrare = request.form.get('gata_de_livrare')
+			id_produs = request.form.get('id_produs')
+
+
+			# selectam data curenta pentru a o folosi in campul data_livrare
+			sql = "SELECT SYSDATE()";
+			mycursor.execute(sql)
+			data_livrare = mycursor.fetchall()
+
+				
+			sql = "UPDATE comanda SET data_livrare=%s where id_comanda=%s"
+			val = (data_livrare[0][0], id_comanda, ) 
+			mycursor.execute(sql, val)
+			mydb.commit()
+
+			return redirect('comenzi')
 
 
 	return render_template('comenzi.html', detalii_comanda=detalii_comanda, result=result, clienti=clienti, angajati=angajati, restaurante=restaurante, comenzi=comenzi)

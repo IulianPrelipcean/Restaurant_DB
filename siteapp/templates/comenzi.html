@@ -59,6 +59,22 @@
 			margin: 0px;
 			border: 0px;
 		}
+		.text_nelivrata{
+			font-family:"Times New Roman", Times, serif;
+			font-size:17px;
+			color: red;
+			padding: 0px;
+			margin: 0px;
+			border: 0px;
+		}
+		.text_livrata{
+			font-family:"Times New Roman", Times, serif;
+			font-size:17px;
+			color: ;
+			padding: 0px;
+			margin: 0px;
+			border: 0px;
+		}
 		.formular_modifica{
 			border-style: solid; 
 			border-top-style: none; 
@@ -105,36 +121,17 @@
 				<div class="collapsible-body">
 					<section class="container section" >
 						{% for comanda in comenzi: %}
-							{% if (comanda[5] == res[0]): %}
+							{% if (comanda[5] == res[0]): %}		<!-- verificam comenzile care apartin restaurantului  -->
 								<form action="" method="POST" class="formular_modifica">
 								<div class="row">
 									<div class="col l3">
 										<div class="input-field">
 											<input type="hidden" name="id_client" value="{% print(comanda[4]) %}">
 											<input type="hidden" name="id_comanda" value="{% print(comanda[0]) %}">
-											<textarea id="message" class="materialize-textarea" name="cod_comanda">{% print(comanda[0]) %}</textarea>
+											<input disabled value="{% print(comanda[0]) %}" id="disabled" type="text" class="modal_text">
 											<label for="cod_comanda">Cod comanda</label>
 										</div>
 									</div>
-									<div class="col l3">
-										<div class="input-field">
-											<textarea id="message" class="materialize-textarea" name="data_preluare">{% print(comanda[1]) %}</textarea>
-											<label for="data_preluare">Data preluare</label>
-										</div>
-									</div>
-									<div class="col l3">
-										<div class="input-field">
-											<textarea id="message" class="materialize-textarea" name="data_livrare">{% print(comanda[2]) %}</textarea>
-											<label for="data_livrare">Data livrare</label>
-										</div>
-									</div>
-									<div class="col l3">
-										<div class="center">
-											<input type="submit" name="actualizeaza_comanda" value="Actualizeaza" class="btn brand z-depth-0">
-										</div>
-									</div>
-								</div>
-								<div class="row">
 									<div class="col l3">
 										
 										<a class="waves-effect waves-light btn modal-trigger" href="#" data-target='{% print(comanda[4], comanda[0]) %}'>Detalii client</a>
@@ -174,8 +171,33 @@
 												<a href="#!" class="modal-close waves-effect waves-green btn-flat">Inchide</a>
 											</div>
 										</div>
-
 									</div>
+									<div class="col l3">
+										<p>
+									      <label>
+									      	{% if (comanda[7] == 1): %}
+									      		<input type="checkbox" class="filled-in" checked="checked" />
+									      	{% else: %}
+									        	<input type="checkbox" name="gata_de_livrare">
+									        {% endif %}
+									        <span>Gata de livrare</span>
+									      </label>
+									    </p>
+									</div>
+									<div class="col l3">
+										<div class="center">
+											<input type="submit" name="actualizeaza_comanda" value="Actualizeaza" class="btn brand z-depth-0">
+										</div>
+									</div>
+								</div>		<!-- end row 1 -->
+								<div class="row">
+									<div class="col l3">
+										<div class="input-field">
+											<input disabled value="{% print(comanda[1]) %}" id="disabled" type="text" class="modal_text">
+											<label for="data_preluare">Data preluare</label>
+										</div>
+									</div>
+									
 									<div class="col l3">
 										<a class="waves-effect waves-light btn modal-trigger" href="#" data-target='{% print(comanda[4]) %}'>Detalii comanda</a>
 										
@@ -243,24 +265,50 @@
 									</div>
 									<div class="col l3">
 										<div class="center">
-											<input type="submit" name="preia_comanda" value="Preia comanda" class="btn brand z-depth-0">
+											{% if (comanda[7] == 1): %}		<!-- comanda poate fi livrata (checkbox "gata de livrare" valid  -->
+												{% if (comanda[3] != None): %}			<!-- butonul devine invalid -->
+													<input type="button" name="" value="Preia comanda" class="btn brand z-depth-0 green">
+												{% else: %}	
+													<input type="submit" name="preia_comanda" value="Preia comanda" class="btn brand z-depth-0 green">	
+												{% endif %}
+											{% else: %}						<!-- comanda NU poate fi livrata inca-->
+												<input type="button" value="Preia comanda" class="btn brand z-depth-0 red">
+											{% endif %}
 										</div>
 									</div>
-								</div>
+								</div>			<!-- end row 2 -->
 								<div class="row">
 									<div class="col l3">
-										<p>
-									      <label>
-									      	{% if (comanda[7] == 1): %}
-									      		<input type="checkbox" class="filled-in" checked="checked" />
-									      	{% else: %}
-									        	<input type="checkbox" name="gata_de_livrare">
-									        {% endif %}
-									        <span>Gata de livrare</span>
-									      </label>
-									    </p>
+										<div class="input-field">
+											<input disabled value="{% print(comanda[2]) %}" id="disabled" type="text" class="modal_text">
+											{% if (comanda[2] == None): %}		<!-- comanda NU este livrata -->
+												<label for="data_livrare"><p class="text_nelivrata">Data livrare</p></label>
+											{% else: %}						<!-- comanda este livrata -->
+												<label for="data_livrare"><p class="text_livrata">Data livrare</p></label>
+											{% endif %}
+										</div>
 									</div>
-								</div>
+									<div class=" col l3">
+										<div class="center">
+											{% if (comanda[2] != None): %}		<!-- comanda poate fi livrata -->
+												<h5 style="color: green;">Comanda este livrata !</h5>
+											{% endif %}
+										</div>
+									</div>
+									<div class="right col l3">
+										<div class="center">
+											{% if (comanda[3] == None): %}		<!-- comanda NU poate fi livrata -->
+												<input type="button" name="" onsubmit="return false" value="Marcheaza ca livrata" class="btn brand z-depth-0 red">
+											{% else: %}						<!-- comanda poate fi livrata -->
+												{% if (comanda[2] == None): %}
+													<input type="submit" name="marcheaza_ca_livrata" value="Marcheaza ca livrata" class="btn brand z-depth-0 green">
+												{% else: %}					<!-- nu se mai poate modifica statusul comenzii-->
+													<input type="button" name="" onsubmit="return false" value="Marcheaza ca livrata" class="btn brand z-depth-0 green">
+												{% endif %}
+											{% endif %}
+										</div>
+									</div>
+								</div>		<!-- end row 3 -->
 								</form>
 							{% endif %}
 						{% endfor %}
