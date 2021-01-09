@@ -10,7 +10,7 @@ bp = Blueprint(__name__, __name__, template_folder='templates')
 
 def show():
 
-	errors = {"cantitate": ' cantiate pre mare', "id_produs": ' '}
+	errors = {"cantitate": ' ', "id_produs": ' '}
 	# selectam produsele pentru a le afisa in tabel
 	id_produs = 2
 	mycursor = mydb.cursor()

@@ -142,22 +142,25 @@
 		</div>
 		<div class="row">
 			<div class="col s12 l5">
-				<form action="" method="POST">
+				<form action="" method="POST" >
 					<div class="input-field">
-						<textarea id="message" class="materialize-textarea" name="nume"></textarea>
+						<textarea id="message" class="materialize-textarea" name="nume">{% print(detalii_formular_invalid['nume'] ) %}</textarea>
 						<label for="nume">Nume</label>
 					</div>
 					<div class="input-field">
-						<textarea id="message" class="materialize-textarea" name="telefon"></textarea>
+						<textarea id="message" class="materialize-textarea" name="telefon">{% print(detalii_formular_invalid['telefon'] ) %}</textarea>
 						<label for="telefon">Telefon</label>
+						<div class="center red-text">{% print("  " + errors['telefon'] ) %}</div>
 					</div>
 					<div class="input-field">
-						<textarea id="message" class="materialize-textarea" name="adresa"></textarea>
+						<textarea id="message" class="materialize-textarea" name="adresa">{% print(detalii_formular_invalid['adresa'] ) %}</textarea>
 						<label for="nume">Adresa</label>
+						<div class="center red-text">{% print("  " + errors['adresa'] ) %}</div>
 					</div>
 					<div class="input-field">
-						<textarea id="message" class="materialize-textarea" name="email"></textarea>
+						<textarea id="message" class="materialize-textarea" name="email">{% print(detalii_formular_invalid['email'] ) %}</textarea>
 						<label for="email">Email</label>
+						<div class="center red-text">{% print("  " + errors['email'] ) %}</div>
 					</div>
 					<div class="center">
 						<input type="submit" name="termina_comanda" value="Termina comanda" class="btn brand z-depth-0">
