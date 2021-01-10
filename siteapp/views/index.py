@@ -67,7 +67,7 @@ def show():
 			sql = "SELECT id_comanda FROM comanda order by id_comanda desc;"
 			mycursor.execute(sql)
 			comanda = mycursor.fetchall()
-			print("\n comanda_id : " + str(comanda[1][0]))
+			#print("\n comanda_id : " + str(comanda[1][0]))
 			id_comanda = comanda[0][0]
 
 			print("len = "+ str(len(comanda)))
@@ -87,7 +87,11 @@ def show():
 				mycursor.execute(sql, val)
 				temp = mycursor.fetchall()
 				status_temp = temp[0][0]
+				print("sadsd ", status_temp)
 
+				if (status_temp == None):
+					status_temp = 0
+					
 				if(int(status_temp) == 0):		# validam ultima inregistrare
 					# pentru tabela comanda, setam campul status pe valoarea 1 ( va fi setata pe valoarea 0 la terminarea comenzii)
 					status_comanda_modificat = 1

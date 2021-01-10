@@ -62,9 +62,10 @@ def show():
 	if request.method == 'POST':
 		if request.form.get('sterge_produs'):
 			id_produs = request.form.get('id_produs')
+			print("das " , id_produs)
 
-			sql = "DELETE FROM restaurant where id_produs=%s"
-			val = (id_restaurant, )
+			sql = "DELETE FROM produs where id_produs=%s"
+			val = (id_produs, )
 			mycursor.execute(sql, val)
 			mydb.commit()
 
