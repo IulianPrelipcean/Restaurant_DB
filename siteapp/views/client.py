@@ -14,12 +14,12 @@ def show():
 	mycursor = mydb.cursor()
 
 
-	# sql = "SELECT SYSDATE()";
-	# mycursor.execute(sql)
-	# data_preluare = mycursor.fetchall()
-	# print("data aeste : ", data_preluare[0][0])
-	# print("data aeste : ", data_preluare[0][0].year)
-	# print("data aeste : ", data_preluare[0][0].second)
+	sql = "SELECT SYSDATE()";
+	mycursor.execute(sql)
+	data_preluare = mycursor.fetchall()
+	print("data aeste : ", data_preluare[0][0])
+	print("data aeste : ", data_preluare[0][0].year)
+	print("data aeste : ", data_preluare[0][0].second)
 
 
 	# array folosit pentru mesajele de eroare in cazul valorilor invalide din formular
@@ -35,13 +35,34 @@ def show():
 	sql = "SELECT id_comanda from comanda order by id_comanda desc limit 1";
 	mycursor.execute(sql)
 	id_comanda = mycursor.fetchall()
-	#print("comanda id : " + str(id_comanda[0][0]))
+	print("comanda id : " + str(id_comanda[0][0]))
+
+	# actualizam pretul comenzii (il setam)
+	sql = "UPDATE comanda SET suma_totala = (select sum(p.pret*d.cantitate) from produs p join comanda_detalii d on (d.comanda_id_comanda=%s and d.produs_id_produs=p.id_produs)) where id_comanda=%s"
+	val = (id_comanda[0][0], id_comanda[0][0], )
+	mycursor.execute(sql, val)
+	mydb.commit()
+
+	# extragem pretul comenzii pentru a-l afisa
+	sql = "SELECT suma_totala from comanda where id_comanda=%s";
+	val = (id_comanda[0][0],)
+	mycursor.execute(sql, val)
+	pret = mycursor.fetchall()		# [(pret, )]
+	if(pret == None):
+			pret = 0
+	print("pret 1 = ", pret)
+	pret = pret[0][0] 		# extragem doar valoarea pretului din tupla
+	print("pret 2 = ", pret)
+
+	
+
 
 	# selectam produsele care apartin comenzii pentru a le afisa in tabel
 	sql = "SELECT * from produs inner join comanda_detalii on (id_produs=produs_id_produs) where comanda_id_comanda = %s;"		#de modificat Iasi
 	val = (id_comanda[0][0], )
 	mycursor.execute(sql, val)
 	result = mycursor.fetchall()
+	print("resukl = ", result)
 
 
 
@@ -81,7 +102,31 @@ def show():
 			mycursor.execute(sql, val)
 			mydb.commit()
 
-			return render_template('client.html', detalii_formular_invalid=detalii_formular_invalid, result=result, detalii_resturant=detalii_resturant, errors=errors)
+
+			# actualizam pretul comenzii (il setam)
+			sql = "UPDATE comanda SET suma_totala = (select sum(p.pret*d.cantitate) from produs p join comanda_detalii d on (d.comanda_id_comanda=%s and d.produs_id_produs=p.id_produs)) where id_comanda=%s"
+			val = (id_comanda[0][0], id_comanda[0][0], )
+			mycursor.execute(sql, val)
+			mydb.commit()
+
+			# extragem pretul comenzii pentru a-l afisa
+			sql = "SELECT suma_totala from comanda where id_comanda=%s";
+			val = (id_comanda[0][0],)
+			mycursor.execute(sql, val)
+			pret = mycursor.fetchall()		# [(pret, )]
+			pret = pret[0][0] 		# extragem doar valoarea pretului din tupla
+			if(pret == None):
+				pret = 0
+
+
+			# selectam produsele care apartin comenzii pentru a le afisa in tabel
+			sql = "SELECT * from produs inner join comanda_detalii on (id_produs=produs_id_produs) where comanda_id_comanda = %s;"		#de modificat Iasi
+			val = (id_comanda[0][0], )
+			mycursor.execute(sql, val)
+			result = mycursor.fetchall()
+
+
+			return render_template('client.html', pret=pret, detalii_formular_invalid=detalii_formular_invalid, result=result, detalii_resturant=detalii_resturant, errors=errors)
 
 
 	# creeam o inregistrare in tabela client
@@ -182,10 +227,10 @@ def show():
 				return redirect('/')
 
 			else:
-				return render_template('client.html',  detalii_formular_invalid=detalii_formular_invalid, result=result, detalii_resturant=detalii_resturant, errors=errors)
+				return render_template('client.html', pret=pret, detalii_formular_invalid=detalii_formular_invalid, result=result, detalii_resturant=detalii_resturant, errors=errors)
 
 
 
 
 
-	return render_template('client.html',  result=result, detalii_resturant=detalii_resturant, errors=errors, detalii_formular_invalid=detalii_formular_invalid)
+	return render_template('client.html',  pret=pret, result=result, detalii_resturant=detalii_resturant, errors=errors, detalii_formular_invalid=detalii_formular_invalid)

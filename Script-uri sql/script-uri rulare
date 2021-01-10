@@ -26,3 +26,18 @@ select * from produs
 
 
 alter table comanda add status_livarare decimal(2);
+
+
+alter table comanda modify column data_livrare timestamp;
+
+
+insert into comanda(data_preluare) values('1577891410') where id_comanda=10;
+
+insert into comanda(data_preluare) values('2020-01-01 10:10:10') where id_comanda=10;
+
+
+update comanda set data_preluare = '2020-01-01 10:10:10' where id_comanda=10;
+    
+    
+    
+    

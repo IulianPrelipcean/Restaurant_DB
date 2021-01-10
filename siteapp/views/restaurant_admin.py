@@ -18,18 +18,6 @@ def show():
 	result = mycursor.fetchall()
 
 
-	# for res in result:
-	# 	print(res)
-
-	# print(result[0][0])
-	# print(result[0][1])
-	# print(result[0][2])
-	# print(result[0][3])
-	# print(result[0][4])
-	# print(result[0][5])
-	# print(result[0][6])
-
-
 	# modificam detaliile despre restaurant
 	if request.method == 'POST':
 		if request.form.get('modifica_restaurant'):

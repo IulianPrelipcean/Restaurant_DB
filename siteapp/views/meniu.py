@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, session, redirect, request
 from siteapp.config.db_connect import mydb
+import re
+
 
 bp = Blueprint(__name__, __name__, template_folder='templates')
 
@@ -32,42 +34,58 @@ def show():
 		if request.form.get('adauga_produs'):
 			cantitate = request.form.get('cantitate_val')
 			id_produs = request.form.get('id_produs')
+			id_comanda = request.form.get('id_comanda')
+
+			# stabilim toate conditiile necesare validarii formularului
+			conditie = 0	# toate campurile sunt corecte
+
+			# verificare cantitate
+			cantitate_validare = re.match('^[0-9]*$', cantitate)
+			if (cantitate_validare == None):
+				print('cantitate invalid')
+				errors['cantitate'] = 'cantitate invalida'
+				errors['id_produs'] = int(id_produs)
+				conditie = 1
 				
-			if (int(cantitate) > 0):
-				#verificam daca sunt suficiente produse in stoc
-				sql = "SELECT stoc from produs where id_produs=%s"
-				val = (id_produs, ) 
-				mycursor.execute(sql, val)
-				produs = mycursor.fetchall()
-				stoc_cantitate = produs[0][0]
-
-				if (int(cantitate) <= int(stoc_cantitate)):
-					# adaugam produsul in comanda
-					status = 1
-					sql = "INSERT INTO comanda_detalii(cantitate, produs_id_produs, status) VALUES(%s, %s, %s);"
-					val = (cantitate, id_produs, status, ) 
+			if(conditie == 0):
+				if (int(cantitate) > 0):
+					#verificam daca sunt suficiente produse in stoc
+					sql = "SELECT stoc from produs where id_produs=%s"
+					val = (id_produs, ) 
 					mycursor.execute(sql, val)
-					mydb.commit()
+					produs = mycursor.fetchall()
+					stoc_cantitate = produs[0][0]
 
-					# actualizam stocurile pentru produsul adaugat
-					noua_cantitate = int(stoc_cantitate) - int(cantitate)
-					sql = "UPDATE produs SET stoc=%s where id_produs=%s"
-					val = (noua_cantitate, id_produs, ) 
-					mycursor.execute(sql, val)
-					mydb.commit()
+					if (int(cantitate) <= int(stoc_cantitate)):
+						# adaugam produsul in comanda
+						status = 1
+						sql = "INSERT INTO comanda_detalii(cantitate, produs_id_produs, status) VALUES(%s, %s, %s);"
+						val = (cantitate, id_produs, status, ) 
+						mycursor.execute(sql, val)
+						mydb.commit()
 
-					errors['cantitate'] = ''
-					errors['id_produs'] = ''
+						# actualizam stocurile pentru produsul adaugat
+						noua_cantitate = int(stoc_cantitate) - int(cantitate)
+						sql = "UPDATE produs SET stoc=%s where id_produs=%s"
+						val = (noua_cantitate, id_produs, ) 
+						mycursor.execute(sql, val)
+						mydb.commit()
 
-					return redirect('meniu')
+						errors['cantitate'] = ''
+						errors['id_produs'] = ''
+
+						return redirect('meniu')
+
+					else:
+						print("mesag de informare, cantitate insuficienta in stoc!!")
+						errors['cantitate'] = 'cantitate prea mare!'
+						errors['id_produs'] = int(id_produs)
 
 				else:
-					print("mesag de informare, cantitate insuficienta in stoc!!")
-					errors['cantitate'] = 'cantitate prea mare !'
-					errors['id_produs'] = int(id_produs)
-
+					print("\ncantiate nula\n")
 			else:
-				print("\ncantiate nula\n")
+				print('cantitate inv')
+				print(errors['cantitate'])
 				
 
 			

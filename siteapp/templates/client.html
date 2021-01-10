@@ -59,6 +59,21 @@
 			margin: 0px;
 			border: 0px;
 		}
+		.chenar_pret{
+			font-family:"Times New Roman", Times, serif;
+			font-size:20px;
+			color: black;
+			padding: 10px;
+			margin: 0px;
+
+			
+			border-style: solid; 
+			border-radius: 20px; 
+			border-color: black; 
+			border-width: 2px; 
+			/*margin-bottom:30px;*/
+
+		}
 	</style>
 
 </head>
@@ -85,7 +100,7 @@
 	<!-- tabelul pentru meniu -->
 	<section class="container section">
 		<div class="row">
-			<a href="/meniu" class="btn brand z-depth-0">Inapoi la meniu</a>
+			<a href="/meniu" class="btn brand z-depth-0"><- Inapoi la meniu</a>			<!-- sageata este un text "<-" -->
 		</div>
 		<div class="row">
 			<h5>Comanda dumneavoastra este: </h5>
@@ -131,14 +146,24 @@
 					</tr>
 				{% endfor %}
 	        </tbody>
-      </table>
+		</table>
+		
 	</section>
 
 
 	<!-- formularul de completat pentru client-->
 	<section class="section container scrollspy" id="contact">
+		<div class=" right row">
+			<div class="chenar_pret">
+				{% if( pret == None): %}
+					<p>Pretul comenzii este: 0 lei</p>
+				{% else: %}
+					<p>Pretul comenzii este: {% print(pret) %} lei</p>
+				{% endif %}
+			</div>
+		</div>
 		<div class="row">
-			<h6> Va rugam completati campurile :) </h6>
+			<h5> Va rugam completati campurile de mai jos :) </h5>
 		</div>
 		<div class="row">
 			<div class="col s12 l5">

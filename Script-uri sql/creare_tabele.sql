@@ -10,7 +10,6 @@ CREATE TABLE restaurant (
 );
 
 
-
 CREATE TABLE produs (
     id_produs    INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     denumire     VARCHAR(30) NOT NULL,
@@ -35,18 +34,6 @@ CREATE TABLE angajat (
 
 CREATE TABLE detalii_angajat (
     angajat_id_angajat  INT NOT NULL,
-    -serie               VARCHAR(20) NOT NULL,
-    -numar               VARCHAR(6) NOT NULL,
-    adresa              VARCHAR(50),
-    pozitie             VARCHAR(20) NOT NULL,
-    data_angajare       DATE,
-    -tura                VARCHAR(10),
-    id_manager          INT,
-    FOREIGN KEY  (angajat_id_angajat) REFERENCES angajat(id_angajat)
-);
--- tabel 2
-CREATE TABLE detalii_angajat (
-    angajat_id_angajat  INT NOT NULL,
     adresa              VARCHAR(50),
     pozitie             VARCHAR(20) NOT NULL,
     id_manager          INT,
@@ -64,32 +51,26 @@ CREATE TABLE client (
 
 CREATE TABLE comanda (
     id_comanda                INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    data_preluare             DATE,
-    data_livrare              DATE,
+    data_preluare             TIMESTAMP,
+    data_livrare              TIMESTAMP,
     angajat_id_angajat        INT,
     client_id_client          INT,
     restaurant_id_restaurant  INT NOT NULL,
-    status                    DECIMAL(1),
+    status                    DECIMAL(1, 0),
+    status_livrare            DECIMAL(2,0),
+    suma_totala               DECIMAL(6,2),
 	FOREIGN KEY  (angajat_id_angajat) REFERENCES angajat(id_angajat),
 	FOREIGN KEY  (client_id_client) REFERENCES client(id_client),
 	FOREIGN KEY  (restaurant_id_restaurant) REFERENCES restaurant(id_restaurant)
 );
 
 
-CREATE TABLE plata (
-    comanda_id_comanda  INT NOT NULL,
-    suma_totala         DECIMAL(6, 2) NOT NULL,
-    tip                 VARCHAR(10),
-    data_plata          DATE,
-    FOREIGN KEY  (comanda_id_comanda) REFERENCES comanda(id_comanda)
-);
-
 CREATE TABLE comanda_detalii (
     id_comanda_detalii  INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    cantitate           DECIMAL(3) NOT NULL,
+    cantitate           DECIMAL(3, 0) NOT NULL,
     comanda_id_comanda  INT,
     produs_id_produs    INT NOT NULL,
-    status              DECIMAL(1),
+    status              DECIMAL(1, 0),
     FOREIGN KEY  (comanda_id_comanda) REFERENCES comanda(id_comanda),
     FOREIGN KEY  (produs_id_produs) REFERENCES produs(id_produs)
 );
